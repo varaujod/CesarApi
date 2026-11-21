@@ -1,0 +1,129 @@
+export const swaggerDocument = {
+  openapi: '3.0.0',
+  info: {
+    title: 'API de Cifra de César',
+    version: '1.0.0',
+    description:
+      'API para cifrar e decifrar mensagens usando a Cifra de César. O alfabeto utilizado é: a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z. Os espaços devem aparecer nas respostas.'
+  },
+  paths: {
+    '/cifrar': {
+      post: {
+        summary: 'Cifra uma mensagem usando a Cifra de César',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CifrarRequest' }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'Mensagem cifrada com sucesso',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/CifrarResponse' }
+              }
+            }
+          },
+          '400': { description: 'Requisição inválida' }
+        }
+      }
+    },
+    '/decifrar': {
+      post: {
+        summary: 'Decifra uma mensagem cifrada usando a Cifra de César',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/DecifrarRequest' }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'Mensagem decifrada com sucesso',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/DecifrarResponse' }
+              }
+            }
+          },
+          '400': { description: 'Requisição inválida' }
+        }
+      }
+    },
+    '/decifrarForcaBruta': {
+      post: {
+        summary:
+          'Decifra uma mensagem cifrada que não possui a informação de deslocamento, utilizando força bruta na Cifra de César. Adotar o idioma português como o único idioma aceito.',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/DecifrarForcaBrutaRequest' }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'Mensagem decifrada com sucesso',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/DecifrarForcaBrutaResponse' }
+              }
+            }
+          },
+          '400': { description: 'Requisição inválida' }
+        }
+      }
+    }
+  },
+  components: {
+    schemas: {
+      CifrarRequest: {
+        type: 'object',
+        required: ['textoClaro', 'deslocamento'],
+        properties: {
+          textoClaro: { type: 'string', maxLength: 255, example: 'ola mundo' },
+          deslocamento: { type: 'integer', example: 3 }
+        }
+      },
+      CifrarResponse: {
+        type: 'object',
+        properties: {
+          textoCifrado: { type: 'string', maxLength: 255, example: 'rod pxqgr' }
+        }
+      },
+      DecifrarRequest: {
+        type: 'object',
+        required: ['textoCifrado', 'deslocamento'],
+        properties: {
+          textoCifrado: { type: 'string', maxLength: 255, example: 'rod pxqgr' },
+          deslocamento: { type: 'integer', example: 3 }
+        }
+      },
+      DecifrarResponse: {
+        type: 'object',
+        properties: {
+          textoClaro: { type: 'string', maxLength: 255, example: 'ola mundo' }
+        }
+      },
+      DecifrarForcaBrutaRequest: {
+        type: 'object',
+        required: ['textoCifrado'],
+        properties: {
+          textoCifrado: { type: 'string', maxLength: 255, example: 'rod pxqgr' }
+        }
+      },
+      DecifrarForcaBrutaResponse: {
+        type: 'object',
+        properties: {
+          textoClaro: { type: 'string', maxLength: 255, example: 'ola mundo' }
+        }
+      }
+    }
+  }
+};
