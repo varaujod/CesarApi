@@ -1,7 +1,7 @@
 export const swaggerDocument = {
   openapi: '3.0.0',
   info: {
-    title: 'API de Cifra de César',
+    title: 'API de Cifra de César - Bruna Serra e Vinicius Araujo',
     version: '1.0.0',
     description:
       'API para cifrar e decifrar mensagens usando a Cifra de César. O alfabeto utilizado é: a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z. Os espaços devem aparecer nas respostas.'
