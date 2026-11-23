@@ -93,15 +93,13 @@ export class CesarService {
       throw new ValidationError(`O campo '${nomeCampo}' deve ter entre 1 e 255 caracteres.`);
     }
 
-    const textoNormalizado = texto.toLowerCase();
-
-    if (!/^[a-z ]+$/.test(textoNormalizado)) {
+    if (!/^[a-zA-Z ]+$/.test(texto)) {
       throw new ValidationError(
         `O campo '${nomeCampo}' deve conter apenas letras de 'a' a 'z' (sem acentos) e espaços.`
       );
     }
 
-    return textoNormalizado;
+    return texto;
   }
 
   private validarDeslocamento(deslocamento: unknown): number {
@@ -120,9 +118,11 @@ export class CesarService {
       if (char === ' ') {
         resultado += ' ';
       } else {
-        const indiceAtual = ALFABETO.indexOf(char);
+        const isUpper = char >= 'A' && char <= 'Z';
+        const indiceAtual = ALFABETO.indexOf(char.toLowerCase());
         const novoIndice = (indiceAtual + shift) % TAMANHO_ALFABETO;
-        resultado += ALFABETO[novoIndice];
+        const novaLetra = ALFABETO[novoIndice];
+        resultado += isUpper ? novaLetra.toUpperCase() : novaLetra;
       }
     }
 
@@ -130,16 +130,17 @@ export class CesarService {
   }
 
   private pontuarPortugues(texto: string): number {
+    const textoMinusculo = texto.toLowerCase();
     let score = 0;
 
-    const palavras = texto.split(' ').filter((p) => p.length > 0);
+    const palavras = textoMinusculo.split(' ').filter((p) => p.length > 0);
     for (const palavra of palavras) {
       if (PALAVRAS_PT.has(palavra)) {
         score += 20 * palavra.length;
       }
     }
 
-    const apenasLetras = texto.replace(/ /g, '');
+    const apenasLetras = textoMinusculo.replace(/ /g, '');
     for (let i = 0; i < apenasLetras.length - 1; i++) {
       const bigrama = apenasLetras.slice(i, i + 2);
       if (BIGRAMAS_PT.has(bigrama)) {
